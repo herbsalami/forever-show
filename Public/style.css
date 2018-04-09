@@ -1,0 +1,267 @@
+html, body {
+   height: 100%;
+   width: 100%;
+   margin: 0;
+   padding: 0;
+   background-color: #383838;
+   position: fixed;
+   z-index: -3;
+   /*overflow: hidden;*/
+
+}
+
+body {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	font-style: italic;
+	font-family: 'Libre Baskerville', serif;
+	color: 	#FFF5EE;
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+
+#button {
+	background: #C0C0C0;
+	background: radial-gradient(circle at 50%, #91A8d0, #91A8d0 50%, #eee 75%, #91A8d0 75%);
+	background: url('https://blazepress.com/.image/c_limit%2Ccs_srgb%2Cq_80%2Cw_800/MTI4OTg2MzU5NTg2MTMzMjY2/mesmerising-gifs-you-wont-be-able-to-take-your-eyes-off-of-by-dave-whyte-6.webp');
+	background-size: cover;
+	width: 66.6%;
+	height: 75%;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+	z-index: 1;
+	overflow: hidden;
+
+}
+
+#logo {
+	position: absolute;
+	font-size: 24px;
+	/*color: black;*/
+	color: ghostwhite;
+	margin: 1vh;
+	padding: 2vh;
+	border-top: 2px solid #FFF5EE;
+	border-left: 2px solid #FFF5EE;
+	border-right: 2px solid #FFF5EE;
+	border-top: 2px solid #FEDD00;
+	border-left: 2px solid #FEDD00;
+	border-right: 2px solid #FEDD00;
+	z-index: 2;
+}
+
+#track, #artist {
+	position: absolute;
+	z-index: 2;
+}
+
+h4 {
+	position: absolute;
+	font-size: 4vh;
+	white-space: nowrap;
+	width: 600px;
+	margin: 0 auto;
+	/*left: calc(-225px);*/
+	left: calc(33.3% - 300px);
+	text-align: center;
+
+}
+#artist {
+	top: calc(37.5% - 150px);
+	-webkit-animation:spin 8s linear infinite;
+    -moz-animation:spin 8s linear infinite;
+    animation:spin 8s linear infinite;
+    transform-origin: center calc(150px + 4vh);
+}
+
+#track {
+	top: calc(37.5% + 150px - 4vh);
+	-webkit-animation:spin 8s linear infinite;
+    -moz-animation:spin 8s linear infinite;
+    animation:spin 8s linear infinite;
+    transform-origin: center calc(-150px + 4vh);
+}
+
+#info {
+	background: linear-gradient(to bottom right, #47D7AC, #B76BA3);
+	width: 33.4%;
+	height: 75%;
+	border-left: 1vh solid #eee;
+	border-left: 1vh solid #FEDD00;
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: space-between;
+}
+
+#info, #schedule {
+	box-sizing: border-box;
+	padding: 5px;
+}
+
+#schedule {
+	background: #383838;
+	width: 100%;
+	height: 25%;
+	border-top: 1vh solid #eee;
+	border-top: 1vh solid #FEDD00;
+	display: flex;
+	flex-flow: column wrap;
+	align-content: space-around;
+	/*overflow-y: scroll;*/
+}
+
+.schedule-item {
+	height: 16%;
+	padding-left: 1vh;
+	margin-bottom: 0.125vh;
+}
+
+#info-item, #links {
+	background: rgba(0, 0, 0, 0.1);
+	padding: 0.5vh;
+}
+
+#links {
+	-webkit-transition: background 1s; /* Safari */
+    transition: background 1s;
+}
+
+#links:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+#play {
+	width: 0; 
+	height: 0; 
+	border-top: 75px solid transparent;
+	border-bottom: 75px solid transparent; 
+	border-left: 150px solid #f7cac9;
+
+}
+
+#pause {
+	width: 150px;
+	height: 150px;
+/*	background: #f7cac9;
+*/	/*background: linear-gradient(to left, #f7cac9, #f7cac9 33%, #91A8d0 33%, #91A8d0 66%, #f7cac9 66%, #f7cac9);*/
+	background: linear-gradient(to left, #f7cac9, #f7cac9 33%, rgba(0, 0, 0, 0.0) 33%, rgba(0, 0, 0, 0.0) 66%, #f7cac9 66%, #f7cac9);
+	background: #f7cac9;
+	z-index: 1;
+}
+
+#pause {
+    -webkit-transition: border-left 1s; /* Safari */
+    transition: border-left 1s;
+    -webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
+}
+#play {
+	-webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
+    -webkit-transition: border-left 1s; /* Safari */
+    transition: border-left 1s;
+
+}
+
+#play:hover {
+	border-left: 300px solid #f7cac9;
+}
+
+#pause:hover{
+	width: 300px;
+}
+
+#pause, #play {
+	display: none;
+}
+
+@media (max-width: 900px) {
+	#button, #info {
+		width: 50%;
+	}
+	h4 {
+		left: calc(25% - 300px);
+	}
+	#artist {
+	    transform-origin: center calc(75px + 4vh);
+	}
+
+	#track {
+	    transform-origin: center calc(-75px + 4vh);
+	}
+}
+
+@media only screen and (max-width: 600px) {
+
+	html {
+	position: absolute;
+	}
+
+	body {
+		height: auto;
+		position: absolute;
+	/*	flex-direction: column;
+		flex-wrap: nowrap;*/
+		display: block;
+	overflow-y: scroll;
+	}
+
+	#button {
+		overflow-y: scroll;
+		overflow-x: hidden;
+	}
+
+	#pause, #play {
+		display: block;
+	}
+
+	#info {
+		top: 100vh;
+		height: auto;
+		width: 100%;
+		border-left: none;
+		border-top: 1vh solid #FEDD00;
+	}
+
+	#logo {
+		font-size: 24px;
+	}
+
+	#schedule {
+		top: 200vh;
+	}
+
+	#button, #schedule {
+		height: 100vh;
+		width: 100%;
+	}
+	#schedule {
+		flex-flow: column nowrap;
+	}
+	#artist, #track {
+		animation-name: none;
+		font-size: 24px
+	}
+	#artist {
+		top: calc(12.5%/3 + 75px);
+		width: 100vw;
+	    /*transform-origin: center calc(150px + 4vh);*/
+	}
+
+	#track {
+		top: calc(75%/3 + 75px);
+	    /*transform-origin: center calc(-150px + 4vh);*/
+	}
+	h4 {
+		width: 100vw;
+		left: 0;
+	}
+}
+
+
