@@ -1,3 +1,11 @@
+/* 
+To Do:
+Initialize Mongo db
+^^ Have db handle as much preemptive file manipulation/reading as possible
+during track upload period
+create secret track upload form
+*/
+require('dotenv').config();
 const stream = require('stream');
 const path = require('path');
 const express = require('express');
@@ -6,6 +14,108 @@ const http = require('http').Server(app);
 const fs = require('fs');
 const header = require('waveheader');
 const wavFileInfo = require('wav-file-info');
+const port = process.env.PORT || 3000;
+const jwt = require('jsonwebtoken');
+// app.use(express.urlencoded());
+app.use(express.json({ extended: true }));
+let users = [
+	{
+		name: 'Dean', 
+		username: 'daneagle666',
+		password: 'pwdean'
+	}, 
+	{
+		name: 'Paris', 
+		username: 'herbsalami',
+		password: 'pwparis'
+	}, 
+	{
+		name: 'Rachel', 
+		username: 'scatman',
+		password: 'pwrachel'
+	} 
+];
+let tracksTable = [
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, 
+	{
+		name: 'track1',
+		number: 1
+	}, ]
 let tracks = [
 	{
 		id: 'testfile.wav',
@@ -41,7 +151,7 @@ let tracks = [
 const htmlPath = path.join(__dirname, 'Public');
 
 const getScheduleInfo = (req, res, next) => {
-	res.scheduleStart = new Date('March 20, 2018 13:00:00').getTime();
+	res.scheduleStart = new Date('March 20, 2018 15:00:00').getTime();
 	res.timeStamp = Math.round((Date.now() - res.scheduleStart)/1000);
 	next();
 }
@@ -69,6 +179,7 @@ const sendSchedule = (req, res, next) => {
 const getFileInfo = (req, res, next) => {
 	wavFileInfo.infoByFilename(`../Mixes/${res.track.id}`, function(err, info){
 	  	if (err) throw err;
+	  	console.dir(info);
 	  	res.head = info.header;
 	  	res.duration = info.duration;
 	  	res.timeStamp = (res.timeStamp)*((res.head.bits_per_sample * 2 * res.head.sample_rate) / 8);
@@ -77,6 +188,76 @@ const getFileInfo = (req, res, next) => {
 	  	res.write(header(res.head.sample_rate * res.duration, { bitDepth: res.head.bits_per_sample, channels: 2}))
 		next();  	
 	});
+}
+
+const checkUser = (req, res, next) => {
+	// console.log(user.username);
+	let verified = false;
+	users.forEach((item) => {
+		if(item.username === res.user.username && item.password === res.user.password) {
+			verified = true;
+		}
+	})
+	if(verified) {
+		console.log('Passed');
+		next();
+	}
+	else {
+		res.redirect('/login');
+	}
+	
+}
+
+const createToken = (req, res, next) => {
+	res.token = jwt.sign({
+		data: {
+			username: req.body.username,
+			password: req.body.password
+		}
+	}, process.env.JWT_SECRET, { expiresIn: '6h' });
+	next();
+}
+
+const authenticate = (req, res, next) => {
+	jwt.verify(req.query.token, process.env.JWT_SECRET, (err, decoded) => {
+		if(err) {
+			console.log('error with login');
+			res.redirect('/login');
+		}
+		else {
+			console.log('success with login');
+			res.user = decoded.data;
+			next();
+		}
+	});
+}
+
+const login = (req, res, next) => {
+	let user = req.body;
+	let verified = false;
+	users.forEach((item) => {
+		if(item.username === user.username && item.password === user.password) {
+			verified = true;
+		}
+	})
+	if(verified) {
+		next();
+	}
+	else {
+		res.json({
+			error: 'Incorrect Login Info'
+		})
+	}
+}
+
+const setRedirect = (req, res, next) => {
+	res.status(301);
+	next();
+}
+
+const logURL = (req, res, next) => {
+	console.log(req.url);
+	next();
 }
 
 
@@ -92,11 +273,32 @@ app.get('/music', getScheduleInfo, chooseTrack, getTimeInfo, getFileInfo, (req, 
   // src.pipe(res.music);
 });
 
+// app.use('/admin/edit', (req, res, next) => {
+// 	console.log('redirected');
+// 	next();
+// }, authenticate, checkUser, express.static(path.join(__dirname, 'Administrator')));
+
+app.use('/admin/page', express.static(path.join(__dirname, 'Administrator')))
+
 app.get('/info', getScheduleInfo, chooseTrack, sendSchedule);
+
+app.get('/admin', logURL, authenticate, checkUser, (req, res) => {
+	res.redirect('/admin/page');
+});
+
+app.get('/login', logURL, (req, res) => {
+	res.sendFile(path.join(__dirname, './Public', 'login.html'));
+})
+
+app.post('/login', login, logURL, createToken, (req, res, next) => {
+	res.json({token: res.token});
+})
 
 app.use('/', express.static(htmlPath));
 
 
-http.listen(3000, '0.0.0.0', function(){
+
+
+http.listen(port, function(){
   console.log('listening on *:3000');
 });

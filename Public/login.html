@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+</head>
+<body>
+	<form id="login">
+		<input type="text" id="username" name="username"><br>
+		<input type="text" id="password" name="password"><br>
+		<input type="button" id="submit">
+	</form>
+	
+</body>
+	<script type="text/javascript">
+	document.getElementById('submit').addEventListener('click', () => {
+		console.log('before fetch');
+		console.dir(document.getElementById('username'));
+		fetch('/login', {
+			method: 'POST',
+			body: JSON.stringify({
+				username: document.getElementById('username').value,
+				password: document.getElementById('password').value
+			}),
+		    cache: 'no-cache', 
+		    credentials: 'same-origin', 
+		    headers: {
+		      'content-type': 'application/json'
+		    }
+		}).then(response => response.json())
+		.then((data) => {
+			if(data.error) {
+				console.log(data.error);
+			}
+			else if(data.token) {
+
+				sessionStorage.setItem("foreverShowBearerToken", data.token);
+				redirect: window.location.assign(`/admin?token=${sessionStorage.getItem("foreverShowBearerToken")}`);
+			}
+		});
+	});
+console.log('running');
+	</script>
+</html>
