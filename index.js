@@ -35,103 +35,13 @@ let users = [
 		password: 'pwrachel'
 	} 
 ];
-let tracksTable = [
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, 
-	{
-		name: 'track1',
-		number: 1
-	}, ]
+
 let tracks = [
 	{
 		id: 'testfile.wav',
 		name: 'Mix Volume 1',
 		artist: 'Volvox', 
-		description: 'A dominant force on the Brooklyn underground scene, Ariana is known for tough, stripped-back techno and groovy, acid-flavored sets. She has been a busy DJ and event producer since 2006 and in that time has shared the decks with many international stars including The Black Madonna, Marcel Dettmann, DVS1, The Hacker, Legowelt and Mike Servito.',
-		trackList: [ 
-			{
-				start: '0:00',
-				end: '1:50',
-				title: 'My First Mix',
-				artist: 'DJ Hoon'
-			},
-			{
-				start: 'yea'
-			}]
+		description: 'A dominant force on the Brooklyn underground scene, Ariana is known for tough, stripped-back techno and groovy, acid-flavored sets. She has been a busy DJ and event producer since 2006 and in that time has shared the decks with many international stars including The Black Madonna, Marcel Dettmann, DVS1, The Hacker, Legowelt and Mike Servito.'
 
 	}, 
 	{
@@ -278,7 +188,17 @@ app.get('/music', getScheduleInfo, chooseTrack, getTimeInfo, getFileInfo, (req, 
 // 	next();
 // }, authenticate, checkUser, express.static(path.join(__dirname, 'Administrator')));
 
-app.use('/admin/page', express.static(path.join(__dirname, 'Administrator')))
+app.use('/admin/page', express.static(path.join(__dirname, 'Administrator')));
+app.get('/schedule', authenticate, checkUser, (req, res) => {
+	let schedule = [];
+	for(let i = 0; i < 25; i++) {
+		schedule[i] = {
+			position: i,
+			name: `Mix Number ${i}`
+		}
+	}
+	res.json(schedule);
+});
 
 app.get('/info', getScheduleInfo, chooseTrack, sendSchedule);
 
