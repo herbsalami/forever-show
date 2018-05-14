@@ -5,10 +5,10 @@ else {
 	let list = document.createElement('ul');
 	list.className = 'list-group';
 	list.id = 'simpleList';
-	fetch(`/schedule?token=${sessionStorage.getItem('foreverShowBearerToken')}`)
+	fetch(`/admin/db/mixes?token=${sessionStorage.getItem('foreverShowBearerToken')}`)
 	.then(response => response.json())
 	.then((data) => {
-		data.forEach((item, index) => {
+		data.results.forEach((item, index) => {
 			let mix = document.createElement('li');
 			mix.setAttribute('data-value', index)
 			mix.className = 'list-group-item';
@@ -17,7 +17,6 @@ else {
 			console.dir(mix);
 		})
 		document.getElementById('main').appendChild(list);
-		console.dir(data);
 		let sortable = Sortable.create(simpleList);
 		let button = document.createElement('button');
 		button.id = 'print';

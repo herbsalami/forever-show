@@ -203,7 +203,7 @@ app.get('/schedule', authenticate, checkUser, (req, res) => {
 
 app.get('/info', getScheduleInfo, chooseTrack, sendSchedule);
 
-app.use('/admin/db', db);
+app.use('/admin/db', authenticate, db);
 
 app.get('/admin', logURL, authenticate, checkUser, (req, res) => {
 	res.redirect('/admin/page');
