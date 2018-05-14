@@ -2,30 +2,58 @@ if(!sessionStorage.getItem('foreverShowBearerToken')) {
 	document.getElementById('main').innerHTML = '<h1> PLEASE LOGIN <a href="/login">HERE</a> TO VIEW THIS PAGE </h1>';
 }
 else {
+	const saveListOrder = () => {
+		let content = Array.from(document.getElementsByClassName('list-group-item')).map((item, index) => {
+				return {
+					id: item.getAttribute('data-value'),
+					index
+				}
+			});
+		fetch(`/admin/db/mixes?token=${sessionStorage.getItem('foreverShowBearerToken')}`, {
+			headers: {
+				"Content-Length": content.length.toString(),
+				"Content-Type": "application/json"
+			},
+			method: 'PUT', 
+			body: JSON.stringify(content)
+		}).then(response => response.json())
+		.then((data) => {
+			console.dir(data);
+		})
+	};
+	let mixes = [];
 	let list = document.createElement('ul');
 	list.className = 'list-group';
 	list.id = 'simpleList';
 	fetch(`/admin/db/mixes?token=${sessionStorage.getItem('foreverShowBearerToken')}`)
 	.then(response => response.json())
 	.then((data) => {
-		data.results.forEach((item, index) => {
+		data.results.sort((a, b) => {
+			if(a['index'] < b['index']) {
+				return -1;
+			}
+			else {
+				return 1;
+			}
+		}).forEach((item, index) => {
+			mixes.push(item);
 			let mix = document.createElement('li');
-			mix.setAttribute('data-value', index)
+			mix.setAttribute('data-value', item._id);
 			mix.className = 'list-group-item';
-			mix.innerHTML = `<h7>${item.name}</h7>`;
+			mix.innerHTML = `<h7>${item.name}</h7> <div><h9>${item.artist}</h9></div>`;
 			list.appendChild(mix);
 			console.dir(mix);
 		})
-		document.getElementById('main').appendChild(list);
+		document.getElementById('schedule').appendChild(list);
+		console.dir(mixes);
 		let sortable = Sortable.create(simpleList);
 		let button = document.createElement('button');
 		button.id = 'print';
-		button.innerHTML = 'Print List';
+		button.innerHTML = 'Save Schedule Order';
 		document.getElementById('main').appendChild(button);
-		document.getElementById('print').addEventListener('click', () => {
-			console.dir(sortable.toArray());
-		});
+		document.getElementById('print').addEventListener('click', saveListOrder);
 	})
+
 
 }
 

@@ -10,6 +10,7 @@ const stream = require('stream');
 const path = require('path');
 const express = require('express');
 const app = express();
+app.use(express.json({ extended: true }));
 const http = require('http').Server(app);
 const fs = require('fs');
 const header = require('waveheader');
@@ -18,7 +19,6 @@ const port = process.env.PORT || 3000;
 const jwt = require('jsonwebtoken');
 const db = require('./Routes/db');
 // app.use(express.urlencoded());
-app.use(express.json({ extended: true }));
 let users = [
 	{
 		name: 'Dean', 
