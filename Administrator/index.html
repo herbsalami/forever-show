@@ -11,9 +11,39 @@
 	<script src="http://rubaxa.github.io/Sortable/Sortable.js"></script>
 </head>
 <body>
+	<div id="mask">
+		<div id="loader"></div>
+	</div>
 	<div id="main">
-Drag to ReOrder Schedule
-		<div id="schedule" class="w-25 p-3" style="width: 33%">
+		<div id="schedule-section" class="w-25 p-3" style="width: 50%">
+			Drag to ReOrder Schedule
+			<div id="schedule">
+			</div>
+		</div>
+		<div id="upload-section">
+		    <form ref='uploadForm' 
+		      id='uploadForm' 
+		      method='post' 
+		      encType="multipart/form-data">
+		      	<div>
+		      		<label> Name </label>
+				    <input type="text" name="name" required/>
+				</div>
+				<div>
+					<label> Artist </label>
+				    <input type="text" name="artist" required/>
+				</div>
+				<div>
+					<label> Description </label>
+				    <input type="text" name="about" required/>
+				</div>
+				<div>
+			        <input type="file" name="newMix" accept="audio/wav" required/>
+			    </div>
+			    <div>
+			        <input id="upload-button" type='submit' value='Upload!' />
+			    </div>
+		    </form>  
 		</div>
 	</div>
 </body>
