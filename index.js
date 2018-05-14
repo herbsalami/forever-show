@@ -16,6 +16,7 @@ const header = require('waveheader');
 const wavFileInfo = require('wav-file-info');
 const port = process.env.PORT || 3000;
 const jwt = require('jsonwebtoken');
+const db = require('./Routes/db');
 // app.use(express.urlencoded());
 app.use(express.json({ extended: true }));
 let users = [
@@ -201,6 +202,8 @@ app.get('/schedule', authenticate, checkUser, (req, res) => {
 });
 
 app.get('/info', getScheduleInfo, chooseTrack, sendSchedule);
+
+app.use('/admin/db', db);
 
 app.get('/admin', logURL, authenticate, checkUser, (req, res) => {
 	res.redirect('/admin/page');
